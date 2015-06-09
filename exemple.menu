@@ -16,6 +16,7 @@ icon_cmd: echo '/usr/share/pixmaps/thunderbird.png'
 
 title: Run:
 type:text
+phtxt:Type a command...
 button: GO!
 cmd: %s
 

@@ -50,6 +50,10 @@ void textWidgetAction::setParameters(QMap<QString, QString> &map) {
             this->_lineEdit->setText(value);
         else if(key == "text_cmd")
             this->_lineEdit->setText(Util::getCommandResult(value));
+		else if(key == "phtxt")
+			this->_lineEdit->setPlaceholderText(value);
+		else if(key == "phtxt_cmd")
+			this->_lineEdit->setPlaceholderText(Util::getCommandResult(value));
         else if(key == "button") {
             this->_goButton->setVisible(true);
             this->_goButton->setText(value);
