@@ -1,0 +1,12 @@
+testmenu
+myqtmenu
+*.o
+moc_*.cpp
+*.swp
+*.pro.user
+out
+*.swn
+*.swo
+Makefile
+testmenu.yaml
+mqmenu

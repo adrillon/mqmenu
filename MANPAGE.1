@@ -1,0 +1,614 @@
+.TH "MQMENU" "1" "June 9th, 2015" "mqMenu User Manual" ""
+.SH NAME
+.PP
+mqmenu \- full\-featured menu and application launcher
+.SH DESCRIPTION
+.PP
+mqmenu is an application launcher that allows the creation of complex
+menus.
+.SH SYNOPSIS
+.PP
+\f[B]mqmenu\f[] [\f[I]OPTIONS\f[]]
+.SH OPTIONS
+.TP
+.B \-c, \-\-config \f[I]FILE\f[]
+Loads the menu from \f[I]FILE\f[] instead of the default
+\f[B]~/.mqmenu\f[]
+.RS
+.RE
+.TP
+.B \-i, \-\-iconsize \f[I]ICONSIZE\f[]
+Sets the size in pixels of the icons.
+Default is \f[B]24\f[].
+.RS
+.RE
+.TP
+.B \-s, \-\-shell \f[I]SHELL\f[]
+Sets the shell used to run commands (see \f[B]COMMANDS\f[] below).
+Default is \f[B]bash \-c\f[].
+.RS
+.RE
+.TP
+.B \-t, \-\-term \f[I]TERM\f[]
+Sets the terminal used to run commands (see \f[B]COMMANDS\f[] below).
+Default is \f[B]xterm \-e\f[].
+.RS
+.RE
+.TP
+.B \-T, \-\-hold \f[I]HOLDTERM\f[]
+Sets the terminal used to run commands (see \f[B]COMMANDS\f[] below)
+without closing the terminal when finished.
+Default is \f[B]xterm \-hold \-e\f[].
+.RS
+.RE
+.TP
+.B \-x, \-\-xpos \f[I]X\f[]
+Sets the horizontal position of the menu.
+If set to \f[B]mouse\f[] (default), the menu will use the X position of
+the mouse pointer.
+.RS
+.RE
+.TP
+.B \-y, \-\-ypos \f[I]Y\f[]
+Sets the vertical position of the menu.
+If set to \f[B]mouse\f[] (default), the menu will use the Y position of
+the mouse pointer.
+.RS
+.RE
+.SH CONFIGURATION
+.PP
+mqmenu can be configured in the menu file.
+Note that command line arguments will supercede the configuration set in
+a file.
+.PP
+To set the configuration in a file, use the \f[B]mqm_config\f[] entry
+(see \f[B]SYNTAX\f[] below)
+.PP
+The following configuration options are allowed:
+.TP
+.B \f[B]iconsize\f[]
+Sets the size in pixels of the icons.
+.RS
+.RE
+.TP
+.B \f[B]shell\f[]
+Sets the shell used to run commands (see \f[B]COMMANDS\f[] below).
+.RS
+.RE
+.TP
+.B \f[B]term\f[], \f[B]terminal\f[]
+Sets the terminal used to run commands (see \f[B]COMMANDS\f[] below).
+.RS
+.RE
+.TP
+.B \f[B]term_hold\f[], \f[B]hold_term\f[], \f[B]hold_terminal\f[]
+Sets the holding terminal used to run commands (see \f[B]COMMANDS\f[]
+below).
+.RS
+.RE
+.TP
+.B \f[B]x\f[], \f[B]y\f[]
+Sets the horizontal and vertical position of the menu.
+If set to \f[B]mouse\f[], the coordinates of the mouse pointer will be
+used.
+.RS
+.RE
+.SH SYNTAX
+.PP
+mqmenu loads its configuration and the menu description from a file
+whose syntax resembles YAML (but is not YAML).
+The default path of this file is \f[B]~/.mqmenu\f[] and can be changed
+using the \f[I]\-c\f[] option.
+.PP
+The menu is described using entries with the following syntax:
+.IP
+.nf
+\f[C]
+Title\ of\ the\ entry
+parameter:\ value
+foo:\ bar
+\f[]
+.fi
+.PP
+When an entry has subentries (added by increasing the indentation
+level), it creates a submenu:
+.IP
+.nf
+\f[C]
+Submenu
+parameter:value
+foo:bar
+
+\ \ \ \ Subentry
+\ \ \ \ dog:\ wouf
+\ \ \ \ cat:\ meow
+
+\ \ \ \ An\ entry
+\ \ \ \ fly:\ bzzz
+
+Another\ entry
+duck:\ quack
+\f[]
+.fi
+.PP
+This will produce the following menu:
+.IP \[bu] 2
+Submenu
+.RS 2
+.IP \[bu] 2
+Subentry
+.IP \[bu] 2
+An entry
+.RE
+.IP \[bu] 2
+Another entry
+.PP
+Submenus can be nested indefinitely.
+.SS Comments
+.PP
+Any line starting with # will be treated as a comment and ignored.
+.SS Configuration
+.PP
+If the first entry defined in a file is named \f[B]mqm_config\f[], its
+parameters will be treated as configuration and it will not be displayed
+in the menu.
+.PP
+The \f[B]mqm_config\f[] entry uses normal entry syntax:
+.IP
+.nf
+\f[C]
+mqm_config
+\ \ \ \ option:value
+\ \ \ \ ...
+\f[]
+.fi
+.SS Loops
+.PP
+Submenus can be used to create loops.
+There are three type of loops:
+.TP
+.B \f[B]inside\f[]
+The content of the submenu will be repeated inside the submenu.
+.RS
+.RE
+.TP
+.B \f[B]outside\f[]
+The submenu will be added multiple times.
+.RS
+.RE
+.TP
+.B \f[B]inside_out\f[]
+The content of the submenu will be repeated outside the submenu.
+.RS
+.RE
+.PP
+A loop accepts the following parameters:
+.TP
+.B \f[B]loop\f[]
+Defines the type of the loop (inside, outside or inside_out)
+.RS
+.RE
+.TP
+.B \f[B]loop_var\f[]
+Sets the name of the loop variable that will successively take all the
+values defined by \f[I]loop_values\f[].
+You can use the loop variable with \f[I]$x\f[] (if the variable is named
+\f[I]x\f[]).
+The variable of a loop is accessible to all its entries and submenus.
+.RS
+.RE
+.TP
+.B \f[B]loop_values\f[]
+Sets the values (separated by a space) which will be used to set the
+content of the loop variable.
+You can surround a value with double quotes (\f[B]"\f[]) if you want to
+have spaces in it.
+.RS
+.RE
+.TP
+.B \f[B]loop_values_cmd\f[]
+A command that will be executed (see \f[B]COMMANDS\f[] below) and whose
+result will be used to set the content of the loop variable.
+Each line will be a different value.
+.RS
+.RE
+.SS Inside loops
+.PP
+The following code:
+.IP
+.nf
+\f[C]
+Submenu
+loop:\ inside
+loop_var:\ i
+loop_values:\ 1\ 2\ 3\ 4\ 5
+
+\ \ \ \ Subentry\ $i
+\f[]
+.fi
+.PP
+Will produce:
+.IP \[bu] 2
+Submenu
+.RS 2
+.IP \[bu] 2
+Subentry 1
+.IP \[bu] 2
+Subentry 2
+.IP \[bu] 2
+Subentry 3
+.IP \[bu] 2
+Subentry 4
+.IP \[bu] 2
+Subentry 5
+.RE
+.SS Outside loops
+.PP
+The following code:
+.IP
+.nf
+\f[C]
+Submenu
+loop:\ outside
+loop_var:\ i
+loop_values:\ 1\ 2\ 3\ 4\ 5
+
+\ \ \ \ Subentry\ $i
+\f[]
+.fi
+.PP
+Will produce:
+.IP \[bu] 2
+Submenu
+.RS 2
+.IP \[bu] 2
+Subentry 1
+.RE
+.IP \[bu] 2
+Submenu
+.RS 2
+.IP \[bu] 2
+Subentry 2
+.RE
+.IP \[bu] 2
+Submenu
+.RS 2
+.IP \[bu] 2
+Subentry 3
+.RE
+.IP \[bu] 2
+Submenu
+.RS 2
+.IP \[bu] 2
+Subentry 4
+.RE
+.IP \[bu] 2
+Submenu
+.RS 2
+.IP \[bu] 2
+Subentry 5
+.RE
+.SS Inside\-out loops
+.PP
+The following code:
+.IP
+.nf
+\f[C]
+Submenu
+loop:\ inside_out
+loop_var:\ i
+loop_values:\ 1\ 2\ 3\ 4\ 5
+
+\ \ \ \ Subentry\ $i
+\f[]
+.fi
+.PP
+Will produce:
+.IP \[bu] 2
+Subentry 1
+.IP \[bu] 2
+Subentry 2
+.IP \[bu] 2
+Subentry 3
+.IP \[bu] 2
+Subentry 4
+.IP \[bu] 2
+Subentry 5
+.SH MENU ENTRIES
+.PP
+An entry can be three different things.
+.SS Actions
+.PP
+An action is an entry that will run a command when triggered.
+See \f[B]ACTIONS\f[] below.
+.SS Submenus
+.PP
+A submenu is an entry containing subentries.
+See \f[B]SUBMENUS\f[] below.
+.SS Sections
+.PP
+A section is an entry that will display an horizontal bar and will do
+nothing when triggered.
+See \f[B]SECTIONS\f[] below.
+.SH ACTIONS
+.PP
+An action is a normal menu item.
+.PP
+If an entry doesn\[aq]t have subentries, it will be treated as an
+action.
+.PP
+An action accepts the following parameters:
+.TP
+.B \f[B]type\f[]
+Sets the type of the action.
+If ommited, the default type is \f[B]normal\f[].
+.RS
+.RE
+.TP
+.B \f[B]name\f[], \f[B]title\f[]
+Sets the text that will be displayed in the menu.
+You can "omit" this parameter (you can set a title without adding
+\f[B]name:\f[] at the beginning of a line).
+.RS
+.RE
+.TP
+.B \f[B]title_cmd\f[]
+A command that will be executed (see \f[B]COMMANDS\f[] below) and whose
+result will be used as the action\[aq]s title.
+.RS
+.RE
+.TP
+.B \f[B]icon\f[]
+The path to an image file to be used as the action\[aq]s icon.
+.RS
+.RE
+.TP
+.B \f[B]icon_cmd\f[]
+A command that will be executed (see \f[B]COMMANDS\f[] below) and whose
+result will be used as the path to the action\[aq]s icon.
+.RS
+.RE
+.TP
+.B \f[B]cmd\f[]
+A command that will be executed (see \f[B]COMMANDS\f[] below) when the
+action is triggered.
+.RS
+.RE
+.TP
+.B \f[B]term\f[], \f[B]terminal\f[]
+When this parameter is present, the command defined by \f[I]cmd\f[] will
+be executed in a terminal.
+If the value of \f[I]term\f[] is \f[B]hold\f[], the command will be
+executed using the holding terminal (see \f[B]COMMANDS\f[] below).
+.RS
+.RE
+.SS Normal action
+.PP
+A normal action is a simple menu entry that will run a command when
+selected.
+You can add one by setting the parameter \f[I]type\f[] to
+\f[B]normal\f[] or by omitting it.
+.SS Text action
+.PP
+A text action is an entry with a textbox.
+When it is triggered (by pressing Return of clicking the button), a
+command will be run.
+.PP
+Inside the command set with the \f[I]cmd\f[] parameter (see
+\f[B]ACTIONS\f[] above), \f[B]%s\f[] will be replaced with the text
+inside the textbox.
+.PP
+You can add a text action by setting the parameter \f[I]type\f[] to
+\f[B]text\f[].
+A text action accepts the following parameters:
+.TP
+.B \f[B]text\f[]
+The default text that will be present in the text box.
+.RS
+.RE
+.TP
+.B \f[B]text_cmd\f[]
+A command (see \f[B]COMMANDS\f[] below) whose result will be placed into
+the text box.
+.RS
+.RE
+.TP
+.B \f[B]button\f[]
+If this parameter is present, a button will be displayed.
+The value of the parameter will set the text on the button.
+.RS
+.RE
+.TP
+.B \f[B]button_cmd\f[]
+A command (see \f[B]COMMANDS\f[] below) whose result will be used as the
+button\[aq]s text.
+.RS
+.RE
+.SS Combo action
+.PP
+A combo action is a menu entry with a combobox.
+When an item is selected, a command will be run.
+.PP
+Each item of the combo box has three components:
+.IP
+.nf
+\f[C]
+\-\ a\ value
+\-\ a\ text
+\-\ an\ icon
+\f[]
+.fi
+.PP
+The text is what will be displayed in the combobox.
+If no text is specified, the value will be displayed instead.
+When adding items both manually (with \f[I]combo_values\f[]) and
+automatically (with \f[I]combo_values_cmd\f[]), the ones that were added
+manually will be inserted first into the combo box.
+.PP
+Inside the command set with the \f[I]cmd\f[] parameter (see
+\f[B]ACTIONS\f[] above), \f[B]%s\f[] will be replaced with the selected
+item\[aq]s value, and \f[B]%t\f[] with its text.
+.PP
+You can add a combo action by setting the parameter \f[I]type\f[] to
+\f[B]combo\f[].
+A combo action accepts the following parameters:
+.TP
+.B \f[B]combo_values\f[]
+Sets the values (separated by a space) of the items in the combobox.
+.RS
+.RE
+.TP
+.B \f[B]combo_values_cmd\f[]
+A command that will be executed (see \f[B]COMMANDS\f[] below) and whose
+result will be used as the combobox\[aq]s items values.
+.RS
+.RE
+.TP
+.B \f[B]combo_texts\f[]
+Sets the texts (separated by a space) of the items in the combobox.
+.RS
+.RE
+.TP
+.B \f[B]combo_texts_cmd\f[]
+A command that will be executed (see \f[B]COMMANDS\f[] below) and whose
+result will be used as the combobox\[aq]s items texts.
+.RS
+.RE
+.TP
+.B \f[B]combo_icons\f[]
+Sets the icons (separated by a space) of the items in the combobox.
+.RS
+.RE
+.TP
+.B \f[B]combo_icons_cmd\f[]
+A command that will be executed (see \f[B]COMMANDS\f[] below) and whose
+result will be used as the combobox\[aq]s items icons.
+.RS
+.RE
+.TP
+.B \f[B]default_index\f[]
+The zero\-based index of the default item.
+.RS
+.RE
+.TP
+.B \f[B]reselect\f[]
+If set to 1 (default), the command will be executed even if the selected
+item is the same as before.
+Any other value will not trigger this behaviour.
+.RS
+.RE
+.SH SUBMENUS
+.PP
+A submenu is a menu entry that will reveal other menu entries when
+highlighted.
+You can define a submenu by adding subentries to any entry.
+When an entry becomes a submenu, it stops accepting normal actions
+parameters (see \f[B]ACTIONS\f[] above) and accepts the following
+parameters instead:
+.TP
+.B \f[B]name\f[], \f[B]title\f[]
+Sets the text that will be displayed in the menu.
+You can "omit" this parameter (you can set a title without adding
+\f[B]name:\f[] at the beginning of a line).
+.RS
+.RE
+.TP
+.B \f[B]title_cmd\f[]
+A command that will be executed (see \f[B]COMMANDS\f[] below) and whose
+result will be used as the submenu\[aq]s title.
+.RS
+.RE
+.TP
+.B \f[B]icon\f[]
+The path to an image file to be used as the submenu\[aq]s icon.
+.RS
+.RE
+.TP
+.B \f[B]icon_cmd\f[]
+A command that will be executed (see \f[B]COMMANDS\f[] below) and whose
+result will be used as the path to the submenu\[aq]s icon.
+.RS
+.RE
+.SH SECTIONS
+.PP
+A section is an entry that will display an horizontal bar and will do
+nothing when triggered.
+.PP
+To create a simple section, just put three dashes:
+.IP
+.nf
+\f[C]
+
+\-\-\-
+\f[]
+.fi
+.PP
+You can create more complex sections, with a name and an icon, just like
+you would do with a normal entry:
+.IP
+.nf
+\f[C]
+\-\-\-\ NAME\ OF\ THE\ SECTION
+parameter:value
+\&...
+\f[]
+.fi
+.PP
+A section accepts the following parameters:
+.TP
+.B \f[B]title_cmd\f[]
+A command that will be executed (see \f[B]COMMANDS\f[] below) and whose
+result will replace the name of the section.
+.RS
+.RE
+.TP
+.B \f[B]icon\f[]
+The path to an icon for the section.
+.RS
+.RE
+.TP
+.B \f[B]icon_cmd\f[]
+A command that will be executed (see \f[B]COMMANDS\f[] below) and whose
+result will be used as the path to the section\[aq]s icon.
+.RS
+.RE
+.PP
+Note: the icon may or may not be displayed, depending on your operating
+system.
+.PP
+If you want to create an action with the name starting with \-\-\-,
+without it turning into a separator, you can either a) explicitely
+specify the \f[I]name\f[] parameter or b) explicitely specify the
+\f[I]type\f[] parameter.
+.SH COMMANDS
+.PP
+Commands can be executed in three possible ways:
+.IP \[bu] 2
+using a shell (option \f[I]shell\f[], argument \f[I]\-s\f[])
+.IP \[bu] 2
+inside a terminal (option \f[I]term\f[], argument \f[I]\-t\f[])
+.IP \[bu] 2
+inside a holding terminal (option \f[I]hold_term\f[], argument
+\f[I]\-T\f[])
+.PP
+When a command is run using a shell, it can use the shell\[aq]s syntax.
+For exemple, the default shell is \f[B]bash \-c\f[], which means you can
+use bash syntax in commands.
+.PP
+When a command is run inside a terminal, it will run then the terminal
+will be closed, unless you run it inside a holding terminal.
+.PP
+Every command defining the menu (\f[B]icon_cmd\f[],
+\f[B]title_cmd\f[],...) will be run using a shell.
+.PP
+When an action is triggered, its command will be executed using a shell,
+unless the \f[I]term\f[] parameter is present, in which case it will be
+run inside a terminal.
+When the \f[I]term\f[] parameter has the value \f[B]hold\f[], the
+command will be run inside a holding terminal.
+.SH SEE ALSO
+.PP
+The mqmenu source code and all documentation may be downloaded from
+<http://drillon-ala.in/mqmenu>.
+.SH AUTHORS
+Alain DRILLON <contact@drillon-ala.in>.

@@ -1,0 +1,63 @@
+mqm_config
+	x: mouse
+	y: mouse
+	shell: bash -c
+	terminal: urxvt -e
+	term_hold: urxvt --hold -e bash -c
+	iconsize: 8
+
+# This is a comment
+
+Firefox
+icon: /usr/share/pixmaps/firefox.png
+
+Thunderbird
+icon_cmd: echo '/usr/share/pixmaps/thunderbird.png'
+
+title: Run:
+type:text
+button: GO!
+cmd: %s
+
+title: Browser
+type:combo
+combo_values: firefox google-chrome opera
+combo_texts: Firefox "Google Chrome" Opera
+default_index: 1
+
+--- SUBMENUS AHEAD
+
+Submenu
+	loop: inside
+	loop_var: i
+	loop_values: firefox thunderbird
+	icon: /usr/share/pixmaps/firefox.png
+
+	$i
+	icon_cmd: echo /usr/share/pixmaps/$i.png
+	cmd: $i
+	
+Submenu 2
+	loop: outside
+	loop_var: i
+	loop_values: firefox thunderbird
+	icon: /usr/share/pixmaps/$i.png
+
+	$i
+	icon: /usr/share/pixmaps/$i.png
+
+	Subsub
+		loop: inside
+		loop_var: j
+		loop_values: firefox thunderbird
+
+		$j
+		icon: /usr/share/pixmaps/$j.png
+
+Submenu 3
+	loop: inside_out
+	loop_var: i
+	loop_values: firefox thunderbird
+
+	$i
+	icon: /usr/share/pixmaps/$i.png
