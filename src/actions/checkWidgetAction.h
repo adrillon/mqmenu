@@ -19,9 +19,6 @@
 #ifndef __CHECKWIDGETACTION_H__
 #define __CHECKWIDGETACTION_H__
 
-#include <QHBoxLayout>
-#include <QComboBox>
-#include <QLabel>
 #include "myWidgetAction.h"
 
 class checkWidgetAction : public myWidgetAction {
