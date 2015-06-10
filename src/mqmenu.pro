@@ -17,7 +17,8 @@ SOURCES += \
     actions/myWidgetAction.cpp \
     actions/textWidgetAction.cpp \
     Util.cpp \
-    actions/comboWidgetAction.cpp
+    actions/comboWidgetAction.cpp \
+    actions/checkWidgetAction.cpp
 
 HEADERS += \
     Entry.h \
@@ -29,4 +30,5 @@ HEADERS += \
     actions/widgetActions.h \
     Util.h \
     myProxyStyle.h \
-    actions/comboWidgetAction.h
+    actions/comboWidgetAction.h \
+    actions/checkWidgetAction.h

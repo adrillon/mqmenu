@@ -14,6 +14,14 @@ icon: /usr/share/pixmaps/firefox.png
 Thunderbird
 icon_cmd: echo '/usr/share/pixmaps/thunderbird.png'
 
+/tmp/check_test ?
+type:check
+status_cmd:du /tmp/check_test 2> /dev/null
+checked_title_cmd: du -h /tmp/check_test | cut -f 1
+unchecked_title: /tmp/check_test does not exist
+check_cmd: echo 1 > /tmp/check_test
+uncheck_cmd: rm /tmp/check_test
+
 title: Run:
 type:text
 phtxt:Type a command...

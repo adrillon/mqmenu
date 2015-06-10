@@ -1,4 +1,4 @@
-.TH "MQMENU" "1" "June 9th, 2015" "mqMenu User Manual" ""
+.TH "MQMENU" "1" "June 10th, 2015" "mqMenu User Manual" ""
 .SH NAME
 .PP
 mqmenu \- full\-featured menu and application launcher
@@ -388,6 +388,54 @@ A normal action is a simple menu entry that will run a command when
 selected.
 You can add one by setting the parameter \f[I]type\f[] to
 \f[B]normal\f[] or by omitting it.
+.SS Checkbox action
+.PP
+A checkbox action is a simple menu entry with a checkbox.
+It will run a different command if it is checked or unchecked.
+.PP
+You can add a checkbox action by setting the parameter \f[I]type\f[] to
+\f[B]check\f[].
+A checkbox action accepts the following parameters:
+.TP
+.B \f[B]status\f[]
+Determines if the checkbox is checked or not.
+Any value different than 0 will tick the box.
+.RS
+.RE
+.TP
+.B \f[B]status_cmd\f[]
+A command (see \f[B]COMMANDS\f[] below) whose result will determine if
+the checkbox is checked or not.
+Any non\-empty result that is not 0 will tick the box.
+.RS
+.RE
+.TP
+.B \f[B]check_cmd\f[]
+A command (see \f[B]COMMANDS\f[] below) that will be executed when the
+checkbox is enabled by the user.
+Similar to \f[B]cmd\f[].
+.RS
+.RE
+.TP
+.B \f[B]uncheck_cmd\f[]
+A command (see \f[B]COMMANDS\f[] below) that will be executed when the
+checkbox is disabled by the user.
+If this parameter is not set, unchecking the box will have the same
+effect as checking it.
+.RS
+.RE
+.TP
+.B \f[B]checked_title\f[], \f[B]unchecked_title\f[]
+The title of the entry if it is checked or unchecked.
+.RS
+.RE
+.TP
+.B \f[B]checked_title_cmd\f[], \f[B]unchecked_title_cmd\f[]
+A command (see \f[B]COMMANDS\f[] below) that will be executed and whose
+result will be used as the title of the entry if the checkbox is
+checked/unchecked.
+.RS
+.RE
 .SS Text action
 .PP
 A text action is an entry with a textbox.

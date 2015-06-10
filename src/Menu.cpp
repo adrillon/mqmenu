@@ -51,6 +51,8 @@ myWidgetAction* Menu::getAction(Entry *e) {
         return new textWidgetAction(this);
     else if(type == "combo")
         return new comboWidgetAction(this);
+    else if(type == "check")
+        return new checkWidgetAction(this);
 
     return NULL;
 }

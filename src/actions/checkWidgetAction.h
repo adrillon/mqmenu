@@ -16,6 +16,27 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "textWidgetAction.h"
-#include "comboWidgetAction.h"
-#include "checkWidgetAction.h"
+#ifndef __CHECKWIDGETACTION_H__
+#define __CHECKWIDGETACTION_H__
+
+#include <QHBoxLayout>
+#include <QComboBox>
+#include <QLabel>
+#include "myWidgetAction.h"
+
+class checkWidgetAction : public myWidgetAction {
+    Q_OBJECT
+
+public:
+    checkWidgetAction(QObject* parent);
+
+    virtual void setParameters(QMap<QString, QString>& map);
+
+public slots:
+    virtual void runCommand();
+
+private:
+    QString _uncheckCommand;
+};
+
+#endif // __CHECKWIDGETACTION_H__
